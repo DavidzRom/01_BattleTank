@@ -3,3 +3,4 @@ An open world head to `head tank fight with simle AI Terrain and advanced contro
 
 ## Lecture List
 * BT01 intro, notes and asserts
+* BT02 Game design doc (GDD)
