@@ -58,3 +58,7 @@ Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Content Examples
+Content/StarterContent/*
+Content/_Levels/BT17-Firing-M1A1-tank-in-Djibouti.uasset
