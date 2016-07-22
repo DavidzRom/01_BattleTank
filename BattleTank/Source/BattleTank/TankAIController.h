@@ -2,9 +2,12 @@
 
 #pragma once
 
-#include "Public/Tank.h"
+
 #include "AIController.h"
 #include "TankAIController.generated.h"
+
+// Forward DEcleration
+class ATank;
 
 /**
  * 
@@ -17,7 +20,11 @@ class BATTLETANK_API ATankAIController : public AAIController
 		
 
 private:
+	
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+	
+	
 	ATank* GetControlledTank() const;
 	ATank* GetPlayerTank() const;
 	
