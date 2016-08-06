@@ -8,8 +8,10 @@
 
 // forward declerations
 class UTankBarrel; 
-class UTankTurret;
+class UTankTurret; // Ben doesnt have this
 class UTankAimingComponent;
+class UTankMovementComponent;
+class AProjectile;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -32,6 +34,9 @@ public:
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
+	UPROPERTY(BlueprintReadOnly, Category = Controls)
+	UTankMovementComponent* TankMovement = nullptr;
+
 	
 
 private:
@@ -46,8 +51,20 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
-	UPROPERTY(EditAnywhere, Category = "Firing")
-		float LaunchSpeed = 4000.0f; 
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 4000.0f; 
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float ReloadTimeInSec = 3;
+
 	
-	
+	// local barrel reference for spawning projectile
+	UTankBarrel* Barrel = nullptr;
+
+
+	double LastFireTime = 0;
+
 };

@@ -2,7 +2,10 @@
 
 
 #include "BattleTank.h"
+#include "TankBarrel.h"
+#include "Projectile.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "Tank.h"
 
 
@@ -14,12 +17,15 @@ ATank::ATank()
 
 	// no need to protect pointers as added at consruction
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+	//TankMovement = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
+	
 
 }
 
 void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
+	Barrel = BarrelToSet;
 }
 
 
@@ -54,6 +60,20 @@ void ATank::AimAt(FVector HitLocation)
 
 void ATank::Fire()
 {
-	auto Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f: TANK FIRES"), Time);
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSec;
+
+	if (Barrel && isReloaded) 
+	{
+
+		// spawn projectile at socket location on barrel
+
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+	}
 }
