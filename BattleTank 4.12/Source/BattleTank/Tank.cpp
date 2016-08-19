@@ -1,11 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright ZUB
 
 
 #include "BattleTank.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "Tank.h"
 
 
@@ -14,6 +13,8 @@ ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	
+	
 
 	// no need to protect pointers as added at consruction
 	//TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
@@ -24,22 +25,32 @@ ATank::ATank()
 
 
 
+void ATank::BeginPlay()
+{
+	Super::BeginPlay(); // needed for blueprint beginplay to run!!!!
+	
+	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
 
+}
 
 
 
 void ATank::AimAt(FVector HitLocation)
 {
-	
+	if (!ensure(TankAimingComponent)) { return; }
+
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+
+	
 	
 }
 
 void ATank::Fire()
 {
+	if (!ensure(Barrel)) { return; }
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSec;
 
-	if (Barrel && isReloaded) 
+	if (isReloaded) 
 	{
 
 		// spawn projectile at socket location on barrel

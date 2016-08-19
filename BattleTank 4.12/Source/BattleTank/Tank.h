@@ -10,7 +10,6 @@
 class UTankBarrel; 
 class UTankTurret; // Ben doesnt have this
 class UTankAimingComponent;
-class UTankMovementComponent;
 class AProjectile;
 
 UCLASS()
@@ -27,18 +26,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
+	
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
-	UPROPERTY(BlueprintReadOnly)
-	UTankMovementComponent* TankMovement = nullptr;
+	
 
 	
 
 private:
 	// Sets default values for this pawn's properties
 	ATank();
+	virtual void BeginPlay() override;
 
 	
 
@@ -48,6 +49,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
+	// TODO remove once firing is in aiming comp
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000.0f; 
 
